@@ -1,0 +1,28 @@
+#### 1. SERIE DE TIEMPO
+
+pob<- sample(100:120, 15, replace = F)
+pob
+
+### lo convertimos en serie de tiempo: ts
+pobts <- ts(pob, frequency=1, start = (2000))
+# 1: anual
+# 12: mensual
+# 365: diario
+# da el año final de la serie 
+end(pobts)
+# inicio
+start(pobts)
+plot(pobts)
+#
+plot(aggregate(pobts))
+
+
+#### INEGI
+require("foreing")
+infor4<-read.csv("/Users/gemaitzeltorresmejia/Downloads/Libro2.csv")[,1]
+
+
+length(infor4)
+infots <- ts(infor4, frequency=4, start = (2005))
+plot(infots, ylim=c(0,100))
+plot(infots)
