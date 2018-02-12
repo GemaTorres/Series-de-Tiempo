@@ -1,0 +1,58 @@
+##### airpassengers ####
+
+require("forecast")
+help("AirPassengers")
+View(AirPassengers)
+??AirPassengers ### directo a internet
+
+class(AirPassengers)
+### ts serie de tiempo
+start(AirPassengers)
+print(AirPassengers) ### informcion mas exacta
+
+# longitud de la serie
+length(AirPassengers)
+
+# head datos principales
+head (AirPassengers, n=8)
+# tail datos fianles
+tail(AirPassengers, n=8)
+
+plot(AirPassengers)
+### SERIE tendencia creciente
+### componente estacional
+
+plot(AirPassengers, xlab="Años", ylab="No. Pasajeros", type= "s")
+
+
+######
+# de la pagina del inegi bajar tasa de informalidad laboral 
+# en valores relativos a nivel nacional, todos los trimestres desde
+# 2005 a 2017
+# importar a R y se declara serie de tiempo con inicio, fin y frecuencia
+# usar funcion print, lenght, head, tail, con 10 daos, 
+# explicar y graficar con tres tipos diferentes y tres colores,
+# usar y investigar funciones
+#time, deltat, cycle, frquency y explicar para que sirve
+
+
+require("foreing")
+infor<-read.csv("/Users/gemaitzeltorresmejia/Downloads/Libro2.csv")[,1]
+infots <- ts(infor, frequency=4, start = (2005), end= c(2017,4))
+
+print(infots)
+
+length(infots) # 52
+head(infots, n=10)
+tail(infots, n=10)
+
+plot(infots, xlab="Años", ylab="Tasa de informalidad", type= "c", col=12)
+plot(infots, xlab="Años", ylab="Tasa de informalidad", type= "h", col=45)
+plot(infots, xlab="Años", ylab="Tasa de informalidad", type= "n", col=35)
+
+help("time")
+# time numero de años en que fue muestreado
+# cycle da la posicion del ciclo donde ocurre la observacion 
+# frequency regresa el numero veces que se repite 
+# deltat el intervalo de tiempo entre obsercaciones 
+time(infots)
