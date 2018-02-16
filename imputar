@@ -1,0 +1,41 @@
+####### 14 feb #####
+# Creamos el conjunto de datos para formar el corazón
+dat<- data.frame(t=seq(0, 2*pi, by=0.1) )
+# Damos forma a los datos para formar el corazón grande del centro
+xcor <- function(t) 16*sin(t)^3
+ycor <- function(t) 13*cos(t)-5*cos(2*t)-2*cos(3*t)-cos(4*t)
+dat$y=ycor(dat$t)
+dat$x=xcor(dat$t)
+with(dat, plot(x,y, type="l"))
+with(dat, polygon(x,y, col="deeppink", lwd=3, lty=3))  
+# Hacer los corazones morados alrededor del corazón principal del centro
+points(c(10,-10, -15, 15), c(-10, -10, 10, 10), pch=169, font=5, cex=5,col="purple") 
+# Añadir "TE QUIERO" en el centro de la imagen
+
+text(0,0,"TE QUIERO",col='white',cex=2.5)
+
+
+###########
+# Datos de registros de enfermos del 2000 al 2010 smestral
+# 350, 358, 367, 367, 380, 388, 402, 415, 432, 450,
+# NA, NA, NA, NA, 367, 342, 324, 315, 310, 298, 
+
+# Graficar el vector
+# declare y grafique una serie
+# imputar los datos faltantes, como lo haran,
+# graficar la nueva serie con la imputacion
+# graficar la serie de tiempo
+# EuStockMarkets con la funcion plot, que se onbervo
+# ahora graficar plot.ts(EuStockMarkets, col=1:4)
+
+enf<- c(350, 358, 367, 367, 380, 388, 402, 415, 432, 450, NA, NA, NA, NA, 367, 342, 324, 315, 310, 298)
+plot(enf)
+
+serie<- ts(enf, start=2000, end = 2010, frequency = 2)
+plot(serie)
+media<-mean(serie, na.rm = T)
+media
+serie[11:14]<- media
+
+plot(EuStockMarkets)
+ts.plot(EuStockMarkets, col=1:4)
