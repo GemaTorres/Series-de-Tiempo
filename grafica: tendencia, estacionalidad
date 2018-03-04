@@ -1,0 +1,79 @@
+install.packages("fpp")
+require(fpp)
+require(forecast)
+deso<- read.csv("/Users/gemaitzeltorresmejia/Downloads/desocupa.csv")
+tsdeso<- ts(deso, frequency = 4, start = 2005)
+tsdeso0<- ts(deso[1:52,], frequency= 4, start= 2005) ## renglones que mande a llamar
+tsdeso1<- ts(as.vector())
+a0<- decompose(tsdeso)
+names(a0)
+
+## otra forma de hacerlo
+a1<- stl(tsdeso0, s.window=4)
+names(a1)
+
+### esta en time.series
+a1$time.series
+# resisdual, aleatorio, ciclico-> remainder
+
+x11()
+plot(tsdeso0, col="blue", main="desocupacion trimestral",
+     ylab="Tasa de Desocupados", xlab="años")
+lines(a1$time.series[,2], col="red", ylab="Tendencia")
+
+x11()
+plot(a1) #### muestra la descomposicion de slt
+
+
+#### estacionalidad ##### 
+# para ver la estacionalidad hay una funcion que se monthplot
+
+monthplot(a1$time.series[,"seasonal"], main= "", ylab = "seasonal")
+
+# si el componente estacional es eliminado de la ST se le llama ajuste esacional
+# para un modelo aditivo al ajuste estacional es decir yt-st, si es multiplicativo
+#yt/st
+
+#### Ajuste escional (Desestacionalizar)
+## funcion seasadj()
+
+# si no es prioritario se puede eliminar y resultar benefico
+# el desempleo disminuye en diciembre 
+
+x11()
+plot(tsdeso0, col="blue", main="desocupacion trimestral",
+     ylab="Tasa de Desocupados", xlab="años")
+lines(seasadj(a1),col="black")
+
+##### Eejercicio
+
+# 1. descomponer la serie con la funcion stl y plantear descomposicion con un dato
+# 2. grafica con serie y componente estacional y comp tendencia 
+# 3. eliminar componete estacional y graficar, comprobar la formula
+
+disp <- read.csv("/Users/gemaitzeltorresmejia/Downloads/ocupada.csv")
+disp<- data.frame(disp)[,3]
+
+tsdisp0<- ts(disp[1:52,3], frequency= 4, start= 2005)
+
+a1<- stl(tsdisp0, s.window=4)
+names(a1)
+
+a1$time.series
+-0.092393774+13.96913-0.1767333015
+# 13.7
+
+x11()
+layout(1:2)
+plot(tsdisp0, col="blue", main="Tasa trimestral",
+     ylab="Tasa de Disp", xlab="años")
+lines(a1$time.series[,2], col="red", ylab="Tendencia")
+
+plot(tsdisp0, col="blue", main="Tasa trimestral",
+     ylab="Tasa de Disp", xlab="años")
+lines(a1$time.series[,1], col="green", ylab="Estacionalidad")
+
+x11()
+plot(tsdisp0, col="blue", main="desocupacion trimestral",
+     ylab="Tasa de Disp", xlab="años")
+lines(seasadj(a1),col="black")
