@@ -1,0 +1,63 @@
+##### ------------------> MODELOS LINEALES PARA PRONOSTICAR <------------------- #####
+
+#### --------------------INGENUO-------------------- #### 
+# Esta basado en la ultima observacion que arroja la serie de tiempo.
+# Es decir, el pronostico asume que la observacion mas importante es
+# la ultima
+
+# FUNCION EN R
+# naive(serie, h=num pronosticos)
+
+#### --------------------METODO DE LA MEDIA-------------------- #### 
+
+# Este metodo le da el mismo peso a todos los datos u observaciones,
+# se sume con este metodo que las observaciones tienen la misma
+# importancia por lo que el pronostico es un promedio de todas las obs.
+
+#FUNCION EN R
+# meanf(serie, h=num pronosticos)
+
+#### --------------------INGENUO ESTACIONAL-------------------- #### 
+# Este metodo se utiliza en ST con alta estacionalidad, este proceso
+# consiste en darle el mayor peso o ponderacion al dato del mismo
+# periodo en el año anterior, p.ejem. trimistre 2 del 2005 es igual
+# al trimestre 2 del 2006
+
+#FUNCION EN R
+# snaive(serie, h=num pronosticos)
+
+#### --------------------METODO DE LA DERIVADA-------------------- #### 
+# Consiste en que el pronostico puede incrementar o reducirse sobre el 
+# tiempo, dependiendo del pronostico de los cambios historicos de la ST
+
+#FUNCION EN R
+# rwf(serie, h=num pronosticos, drift=true)
+
+#### --------------------EJERCICIO-------------------- #### 
+
+deso<- read.csv("/Users/gemaitzeltorresmejia/Downloads/desocupa.csv")
+tsdeso<- ts(deso, frequency = 4, start = 2005)
+require(fpp)
+tsdeso
+
+desomod1<- meanf(tsdeso, h=10)
+desomod2<- naive(tsdeso, h=10)
+desomod3<- snaive(tsdeso, h=10)
+desomod4<- rwf(tsdeso, h=10, drift = T)
+
+x11()
+plot(desomod1, main = "Tasa de desocupacion Trimestral", col = "pink")
+lines(desomod1$mean, col="green")
+lines(desomod2$mean, col="black")
+lines(desomod3$mean, col="blue")
+lines(desomod4$mean, col="orange")
+
+legend("topleft", lty = 1, col = c("green", "black","blue", "orange"), legend = c("Media", "Ingenuo", "Ingenuao Estacional","Deriva" ))
+
+# fitted. El que ajusta mas o se acerca mas es el mejor
+x11()
+plot(desomod1, main = "Tasa de desocupacion Trimestral", col = "pink")
+lines(desomod1$fitted, col="green")
+lines(desomod2$fitted, col="black")
+lines(desomod3$fitted, col="blue")
+lines(desomod4$fitted, col="orange")
