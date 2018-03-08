@@ -1,0 +1,33 @@
+#### --------------------TAREA-------------------- #### 
+
+banamex<- read.csv("/Users/gemaitzeltorresmejia/Downloads/BNMCORA.MX.csv")
+banamex<- data.frame(banamex[,5])
+banats<- ts(banamex, frequency = 365, start = c(2017,66))
+require(fpp)
+banats
+
+mod1<- meanf(banats, h=10)
+mod2<- naive(banats, h=10)
+mod3<- snaive(banats, h=10)
+mod4<- rwf(banats, h=10, drift = T)
+
+x11()
+plot(mod4, main = "Cierre Banamex", col = "green")
+lines(mod1$mean, col="green")
+lines(mod2$mean, col="black")
+lines(mod3$mean, col="blue")
+lines(mod4$mean, col="orange")
+
+legend("topleft", lty = 1, col = c("green", "black","blue", "orange"), legend = c("Media", "Ingenuo", "Ingenuao Estacional","Deriva" ))
+# la prediccion mas aceptada es la deriva con el modelo 4
+
+# fitted. El que ajusta mas o se acerca mas es el mejor
+x11()
+plot(mod1, main = "Cierre Banamex", col = "pink")
+lines(mod1$fitted, col="green")
+lines(mod2$fitted, col="black")
+lines(mod3$fitted, col="blue")
+lines(mod4$fitted, col="orange")
+legend("topleft", lty = 1, col = c("green", "black","blue", "orange"), legend = c("Media", "Ingenuo", "Ingenuao Estacional","Deriva" ))
+
+# El modelo deriva es el que mas se aproxima al modelo real
