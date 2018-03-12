@@ -1,0 +1,89 @@
+#TAMAULIPAS
+#MICRODATOS DE ENOE 
+#dplyr bygroup
+# sdem 
+
+ntflx<- read.csv("/Users/gemaitzeltorresmejia/Downloads/NFLX.MX.csv")
+bimbo<- read.csv("/Users/gemaitzeltorresmejia/Downloads/BIMBOA.MX.csv")
+tele<- read.csv("/Users/gemaitzeltorresmejia/Downloads/TLEVISACPO.MX.csv")
+banor<- read.csv("/Users/gemaitzeltorresmejia/Downloads/GFNORTEO.MX.csv")
+invex <- read.csv("/Users/gemaitzeltorresmejia/Downloads/INVEXA.MX.csv")
+cemex <- read.csv("/Users/gemaitzeltorresmejia/Downloads/CEMEXCPO.MX.csv")
+
+ntflxts <-ts(ntflx, start =2016, frequency = 252)
+bimbots<- ts(bimbo, start =2016, frequency = 252)
+telets<- ts(tele, start =2016, frequency = 252)
+banorts<- ts(banor, start =2016, frequency = 252)
+invexts <- ts(invex, start =2016, frequency = 252)
+cemexts <- ts(cemex, start =2016, frequency = 252)
+
+x11()
+layout(1:6)
+plot(ntflxts)
+plot(bimbots)
+plot(telets)
+plot(banorts)
+plot(invexts)
+plot(cemexts)
+
+########
+library(foreign)
+enoe17.1 <- read.dbf("/Users/gemaitzeltorresmejia/Downloads/2017_dbf/sdemt117.dbf")
+tam17.1 <- subset(enoe17.1, enoe17.1$ENT==28)
+clase1.17.1<- table(tam17.1$CLASE1)
+clase2.17.1<- table(tam17.1$CLASE2)
+EMP.17.1<- table(tam17.1$EMP_PPAL)
+
+POI.17.1<- EMP.17.1[2] #poblacion en ocupacion informal
+PEA.17.1<- clase1.17.1[2]
+PO.17.1<-clase2.17.1[2]
+PD.17.1<- clase2.17.1[3]
+
+ipo.17.1<- (PO.17.1/PEA.17.1)*100
+ipd.17.1<- (PD.17.1/PEA.17.1)*100
+til1.17.1<- (POI.17.1/PO.17.1)*100
+
+enoe17.2 <- read.dbf("/Users/gemaitzeltorresmejia/Downloads/2017_dbf/2017trim2_dbf/sdemt217.dbf")
+tam17.2 <- subset(enoe17.2, enoe17.2$ENT==28)
+clase1.17.2<- table(tam17.2$CLASE1)
+clase2.17.2<- table(tam17.2$CLASE2)
+EMP.17.2<- table(tam17.2$EMP_PPAL)
+
+POI.17.2<- EMP.17.2[2] #poblacion en ocupacion informal
+PEA.17.2<- clase1.17.2[2]
+PO.17.2<-clase2.17.2[2]
+PD.17.2<- clase2.17.2[3]
+
+ipo.17.2<- (PO.17.2/PEA.17.2)*100
+ipd.17.2<- (PD.17.2/PEA.17.2)*100
+til1.17.2<- (POI.17.2/PO.17.2)*100
+
+enoe17.3 <- read.dbf("/Users/gemaitzeltorresmejia/Downloads/2017_dbf/2017trim3_dbf/sdemt317.dbf")
+tam17.3 <- subset(enoe17.3, enoe17.3$ENT==28)
+clase1.17.3<- table(tam17.3$CLASE1)
+clase2.17.3<- table(tam17.3$CLASE2)
+EMP.17.3<- table(tam17.3$EMP_PPAL)
+
+POI.17.3<- EMP.17.3[2] #poblacion en ocupacion informal
+PEA.17.3<- clase1.17.3[2]
+PO.17.3<-clase2.17.3[2]
+PD.17.3<- clase2.17.3[3]
+
+ipo.17.3<- (PO.17.3/PEA.17.3)*100
+ipd.17.3<- (PD.17.3/PEA.17.3)*100
+til1.17.3<- (POI.17.3/PO.17.3)*100
+
+enoe17.4 <- read.dbf("/Users/gemaitzeltorresmejia/Downloads/2017_dbf/2017trim4_dbf/sdemt417.dbf")
+tam17.4 <- subset(enoe17.4, enoe17.4$ENT==28)
+clase1.17.4<- table(tam17.4$CLASE1)
+clase2.17.4<- table(tam17.4$CLASE2)
+EMP.17.4<- table(tam17.4$EMP_PPAL)
+
+POI.17.4<- EMP.17.4[2] #poblacion en ocupacion informal
+PEA.17.4<- clase1.17.4[2]
+PO.17.4<-clase2.17.4[2]
+PD.17.4<- clase2.17.4[3]
+
+ipo.17.4<- (PO.17.4/PEA.17.4)*100
+ipd.17.4<- (PD.17.4/PEA.17.4)*100
+til1.17.4<- (POI.17.4/PO.17.4)*100
