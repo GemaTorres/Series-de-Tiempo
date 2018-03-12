@@ -1,0 +1,53 @@
+ntflx<- read.csv("/Users/gemaitzeltorresmejia/Downloads/NFLX.MX.csv")
+bimbo<- read.csv("/Users/gemaitzeltorresmejia/Downloads/BIMBOA.MX.csv")
+tele<- read.csv("/Users/gemaitzeltorresmejia/Downloads/TLEVISACPO.MX.csv")
+banor<- read.csv("/Users/gemaitzeltorresmejia/Downloads/GFNORTEO.MX.csv")
+invex <- read.csv("/Users/gemaitzeltorresmejia/Downloads/INVEXA.MX.csv")
+cemex <- read.csv("/Users/gemaitzeltorresmejia/Downloads/CEMEXCPO.MX.csv")
+
+ntflxts <-ts(ntflx, start =2016, frequency = 252)
+bimbots<- ts(bimbo, start =2016, frequency = 252)
+telets<- ts(tele, start =2016, frequency = 252)
+banorts<- ts(banor, start =2016, frequency = 252)
+invexts <- ts(invex, start =2016, frequency = 252)
+cemexts <- ts(cemex, start =2016, frequency = 252)
+
+netmod1<- meanf(ntflxts, h=10)
+netmod2<- naive(ntflxts, h=10)
+netmod3<- snaive(ntflxts, h=10)
+netmod4<- rwf(ntflxts, h=10, drift = T)
+
+bimmod1<- meanf(bimbots, h=10)
+bimmod2<- naive(bimbots, h=10)
+bimmod3<- snaive(bimbots, h=10)
+bimmod4<- rwf(bimbots, h=10, drift = T)
+
+telmod1<- meanf(telets, h=10)
+telmod2<- naive(telets, h=10)
+telmod3<- snaive(telets, h=10)
+telmod4<- rwf(telets, h=10, drift = T)
+
+banmod1<- meanf(banorts, h=10)
+banmod2<- naive(banorts, h=10)
+banmod3<- snaive(banorts, h=10)
+banmod4<- rwf(banorts, h=10, drift = T)
+
+cemmod1<- meanf(cemexts, h=10)
+cemmod2<- naive(cemexts, h=10)
+cemmod3<- snaive(cemexts, h=10)
+cemmod4<- rwf(cemexts, h=10, drift = T)
+
+invmod1<- meanf(invexts, h=10)
+invmod2<- naive(invexts, h=10)
+invmod3<- snaive(invexts, h=10)
+invmod4<- rwf(invexts, h=10, drift = T)
+
+
+x11()
+layout(1:6)
+plot(ntflxts)
+plot(bimbots)
+plot(telets)
+plot(banorts)
+plot(invexts)
+plot(cemexts)
