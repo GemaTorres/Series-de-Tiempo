@@ -1,0 +1,42 @@
+library("foreign")
+acci<- read.csv("/Users/gemaitzeltorresmejia/Downloads/INEGI_Exporta_20180312162208.csv")
+
+acci1<- acci[6:17,-1]
+acci1<- na.omit(acci1)
+tra<- t(t(acci1))
+ctra<- c(tra)
+
+accts<- ts(ctra, frequency = 12, start = 1997)
+
+require(fpp)
+
+# SES para pronosticar Suavizado Exponecial Simple
+plot(accts, ylab="Accidente de Autos", col="blue")
+# cercano a 1 porque queremos que se comporte como lo ultimo
+# por fines practicos
+mod1 <- ses(accts, alpha =0.1, h=12)
+mod2 <- ses(accts, alpha =0.5, h=12)
+mod3 <- ses(accts, alpha =0.9, h=12)
+
+names(mod1)
+x11()
+plot(mod1, col = "purple", ylab="Accidente de Autos", main = "No. de Accidentes Mod1")
+lines(mod1$mean, col="purple")
+lines(mod2$mean, col="blue")
+lines(mod3$mean, col="green")
+legend("topleft", lty=1, col=c("purple","purple", "blue", "green"),legend  = 
+         c("datos originales",expression(alpha==0.1),expression(alpha==0.5),expression(alpha==0.9)))
+
+plot(mod2, col = "blue", ylab="Accidente de Autos", main = "No. de Accidentes Mod2")
+lines(mod1$mean, col="purple")
+lines(mod2$mean, col="blue")
+lines(mod3$mean, col="green")
+legend("topleft", lty=1, col=c("blue","purple", "blue", "green"),legend  = 
+         c("Datos originales",expression(alpha==0.1),expression(alpha==0.5),expression(alpha==0.9)))
+
+plot(mod2, col = "green", ylab="Accidente de Autos", main = "No. de Accidentes Mod3")
+lines(mod1$mean, col="black")
+lines(mod2$mean, col="blue")
+lines(mod3$mean, col="green")
+legend("topleft", lty=1, col=c("green","purple", "blue", "green"),legend  = 
+         c("datos originales",expression(alpha==0.1),expression(alpha==0.5),expression(alpha==0.9)))
