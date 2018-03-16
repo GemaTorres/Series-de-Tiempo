@@ -1,0 +1,13 @@
+library(foreign)
+base<- read.dbf("/Users/gemaitzeltorresmejia/Downloads/2017_dbf/2017trim4_dbf/coe1t417.dbf")
+
+base$P1<- as.numeric(as.character(base$P1))
+base$P1A1<- as.numeric(as.character(base$P1A1))
+base$P1B<- as.numeric(as.character(base$P1B))
+base$P1C<- as.numeric(as.character(base$P1C))
+base$P1D<- as.numeric(as.character(base$P1D))
+base$P1E<- as.numeric(as.character(base$P1E))
+
+coupa<- subset(base, base$P1==1 | base$P1A1==1 | base$P1A2==2 | base$P1B==1 | base$P1C==1 | base$P1C==2 | base$P1C==3 | base$P1C==4 |base$P1D==1 | base$P1E==1)
+ sum(table(base$P3))
+ 
