@@ -1,0 +1,19 @@
+### "y" ajustada ####
+ require(fpp)
+pib<- read.csv("/Users/gemaitzeltorresmejia/Downloads/pib.csv")
+ pibt<- ts(pib, start = 1961, frequency = 1)
+ mod1 <- ses(pibt, alpha=0.1, h=5, initial = "simple")
+ mod1$fitted
+ x11()
+ plot(mod1)
+ lines(mod1$fitted)
+ 
+ ###### METODO HOLT LIENAL ####
+ mod2<- holt(pibt, alpha = 0.8, beta = 0.5, initial = "simple", h=5)
+ x11()
+ plot(pibt)
+lines(mod1$fitted, col=45)
+lines(mod2$fitted, col=15)
+lines(mod1$mean, col= 28)
+lines(mod2$mean, col= 50)
+ 
