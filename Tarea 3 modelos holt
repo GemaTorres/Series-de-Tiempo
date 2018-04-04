@@ -1,0 +1,92 @@
+##### Ejercicio ####
+### beta depende de las pendientes si es mas pronunciada la beta es mayor
+
+require(fpp)
+base<- read.csv("/Users/gemaitzeltorresmejia/Downloads/esp_vida_afg.csv")
+ts<- ts(base, start = 1968, frequency = 1)
+plot(ts)
+
+modHET<- holt(ts, alpha=.95, beta= 0.78, initial= "simple", exponential=T, h= 12)
+modATA<- holt(ts, damped=T, h= 12)
+modATM<- holt(ts, damped=T,exponential=T, h= 12)
+
+
+### valores ajustados
+x11()
+plot(ts, main= "Esperanza de vida Afghanistan", sub = "Datos observados con ajustados", ylab = "Años")
+lines(modHET$fitted, col= 84)
+lines(modATA$fitted, col= 565)
+lines(modATM$fitted, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+
+# pronosticos
+x11()
+layout(1:3)
+plot(modHET, main= "Esperanza de vida Afghanistan", sub = "Modelo Holt Exponencial Tendencia", ylab = "Años")
+plot(modATM, main= "Esperanza de vida Afghanistan", sub = "Modelo Amortiguado Tendencia Multiplicativa", ylab = "Años")
+plot(modATA, main= "Esperanza de vida Afghanistan", sub = "Modelo Amortiguado Tendencia Aditiva", ylab = "Años")
+
+# vALORES AJUSTADOS Y PRONOSTICOS
+
+x11()
+layout(1:3)
+plot(modHET, main= "Esperanza de vida Afghanistan", sub = "Modelo Holt Exponencial Tendencia", ylab = "Años")
+lines(modHET$fitted, col= 84)
+lines(modATA$fitted, col= 565)
+lines(modATM$fitted, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+plot(modATM, main= "Esperanza de vida Afghanistan", sub = "Modelo Amortiguado Tendencia Multiplicativa", ylab = "Años")
+lines(modHET$fitted, col= 84)
+lines(modATA$fitted, col= 565)
+lines(modATM$fitted, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+plot(modATA, main= "Esperanza de vida Afghanistan", sub = "Modelo Amortiguado Tendencia Aditiva", ylab = "Años")
+lines(modHET$fitted, col= 84)
+lines(modATA$fitted, col= 565)
+lines(modATM$fitted, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+## el mejor modelo que yo pude obervar fue el de Modelo Amortiguado Tendencia Multiplicativa 
+
+# mean
+
+x11()
+layout(1:3)
+plot(modHET, main= "Esperanza de vida Afghanistan", sub = "Modelo Holt Exponencial Tendencia", ylab = "Años")
+lines(modHET$mean, col= 84)
+lines(modATA$mean, col= 565)
+lines(modATM$mean, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+plot(modATA, main= "Esperanza de vida Afghanistan", sub = "Modelo Holt Exponencial Tendencia", ylab = "Años")
+lines(modHET$mean, col= 84)
+lines(modATA$mean, col= 565)
+lines(modATM$mean, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+plot(modATM, main= "Esperanza de vida Afghanistan", sub = "Modelo Holt Exponencial Tendencia", ylab = "Años")
+lines(modHET$mean, col= 84)
+lines(modATA$mean, col= 565)
+lines(modATM$mean, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
+
+ts1<- ts[1:43]
+ts1<- ts(ts1, start=1968, frequency=1)
+### grafica
+x11()
+plot(ts1, main= "Esperanza de vida Afghanistan", sub = "Datos observados hasta 2010", ylab = "Años", xlim= c(1968,2016))
+lines(modHET$fitted, col= 84)
+lines(modATA$fitted, col= 565)
+lines(modATM$fitted, col= 614)
+
+legend("topleft", lty = 1, col = c(84, 565, 614), legend = c("HET", "ATA", "ATM"))
