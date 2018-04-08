@@ -1,0 +1,12 @@
+#####
+plot(AirPassengers)
+aa<- AirPassengers
+
+### al aplicar logaritmo la grafica debe cambiar para hacer stacionaria
+# estabilizar la varianza
+
+plot(log(aa))
+
+### diferenciacion
+# ya que no fue suficiente se aplica diff
+plot(diff(log(aa)))
