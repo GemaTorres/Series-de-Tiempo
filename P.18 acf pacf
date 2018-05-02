@@ -1,0 +1,143 @@
+bimbo<- read.csv("/Users/gemaitzeltorresmejia/Downloads/BIMBOA.MX.csv")[,5]
+bimbot<- ts(bimbo, frequency = 252, start = 2017)
+
+###### vamos a revisarsi la serie es estacionaria
+## eso lo hacemos con el adf.test pvalue< .05
+require(fpp)
+adf.test(bimbo)
+
+# en esta serie obtenemos un p-value = 0.08272
+# por lo que hay que aplicar una diferenciacion 
+# para convertirla en estacionaria
+
+dbimbot <- diff(bimbot)
+# se vuelve a hacer el ADFtest para ver si cumple la hip
+adf.test(dbimbot)
+#  p-value = 0.01 ya lo cumple
+
+###### ahora que tenemos una st estacionaria
+# ya podemos aplicar el modelo arima
+# por lo que hay que elegir los valores de p y q
+# porque la dferenciacion es una solo se aplico
+# una sla vez la diff
+### para elegir p y q se usan las funciones de
+# autocorrelacion (acf, valor de q) y autocorrelacion
+# parcial (pacf, valor de p)
+
+acf(dbimbot)
+# una vez que se aplique la funcion, se observa la grafica y se ven cuantas
+# lineas sobrepasan el margen y eso es el valor de q 
+# EL PRIMER VALOR SIEMPRE ES 1
+
+pacf(dbimbot)
+
+# propndia un ARIMA(0,1,O)
+mod1<- Arima(bimbot, order = c(0,1,0))
+mod1
+# usar el AICc menor valor
+
+# Ccomparar otros dos modelos
+mod2<- Arima(bimbot, order = c(1,1,2)) # este mejora el modelo
+mod2
+mod3<- Arima(bimbot, order = c(3,1,2))
+mod3
+mod4<- Arima(bimbot, order = c(2,1,2)) # uan mejora el modelo y se elige este
+mod4
+pronmod4<- forecast(mod4, h=12)
+plot(pronmod4, include = 18)
+# include da los ultimos 18 datos para poder ver la tendencia
+
+plot(pronmod4)
+
+
+
+
+##### COMPARACION con modelo autoarima
+mod<- auto.arima(bimbot)
+mod
+# ARIMA(1,1,1) 
+#  AICc=446.67 
+plot(forecast(mod, h=12), include=20)
+
+
+
+### EJERCICO
+# elegir dos series de tiempo diferentes a las que 
+# hemos visto en clase, repetir el procediemiento
+# para elegir un modelo ARIMA mejor y comparar
+# con el criterio AICc y comparar con modelo
+# AUTORIMA
+
+help("datasets")
+library(help = "datasets")
+base<- airmiles
+adf.test(base) # p-value = 0.895
+dserie<- diff(base)
+adf.test(dserie) # p-value = 0.02265
+acf(dserie) # 0
+pacf(dserie) # 0
+mod1<- Arima(base, order=c(0,1,0))
+mod1 #AICc=411.45 
+mod2<- Arima(base, order = c(1,1,2)) 
+mod2 # AICc=397.26
+mod3<- Arima(base, order = c(3,1,2))
+mod3 # AICc=402.94 
+mod4<- Arima(base, order = c(1,1,0)) 
+mod4 # AICc=399.9  
+# pronosticando con mod2
+plot(forecast(mod2, h=5), include = 10)
+
+modarima<- auto.arima(base)
+modarima 
+# ARIMA(0,2,1) 
+# AICc=375.3 
+# pronosticando con autoarima
+plot(forecast(modarima, h=5), include = 10)
+# quedo un mejor modelo con la funcion auto.arima
+
+################
+base2<- lynx
+adf.test(base2) # p-value = 0.01
+# no se le aplica nunguna diferenciacion
+acf(base2) # q= 16
+pacf(base2) # p=6
+mod1<- Arima(base2, order=c(16,0,6))
+mod1 #AICc=1883.04
+mod2<- Arima(base2, order = c(14,1,5)) 
+mod2 # AICc=1873.19 
+mod3<- Arima(base2, order = c(14,0,7))
+mod3 # AICc=1890.65 
+mod4<- Arima(base2, order = c(17,0,8)) 
+mod4 # AICc=1895.35  
+# pronosticando con mod2
+plot(forecast(mod2, h=20), include = 40)
+
+modarima<- auto.arima(base2)
+modarima 
+# ARIMA(2,0,2) with non-zero mean 
+# ICc=1876.95
+# pronosticando con autoarima
+plot(forecast(modarima, h=20), include = 40)
+
+# el mejor modelo fue el 2 que se saco a partir de la construccion del modelo
+
+########### DE OTRA FORMA
+base2<- lynx
+adf.test(base2) # p-value = 0.01
+# no se le aplica nunguna diferenciacion
+acf(base2) # q= 16
+pacf(base2) # p=6
+mod1<- Arima(base2, order=c(6,0,16))
+mod1 #AICc=1891.71
+mod2<- Arima(base2, order = c(5,1,14)) 
+mod2 # AICc=1875.48 
+mod3<- Arima(base2, order = c(7,0,14))
+mod3 # AICc=1889.88  
+mod4<- Arima(base2, order = c(8,0,17)) 
+mod4 # AICc=1892.82 
+# pronosticando con mod2 con AICc=1891.71
+plot(forecast(mod2, h=20), include = 40)
+
+# contrastando con el ejercicio anterior
+# ARIMA(5,1,14)  AICc=1875.48 
+# ARIMA(14,1,5)  AICc=1873.19 
