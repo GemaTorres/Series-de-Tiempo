@@ -1,0 +1,30 @@
+base<-read.csv("/Users/gemaitzeltorresmejia/Downloads/pib.csv")
+ts<- ts(base, start=1961, frequency=1)
+require("fpp")
+mod1<- auto.arima(ts, seasonal = F)
+mod1
+#ARIMA(0,1,2)
+# no hay cte
+# pronosticos a largo plazo como una constante
+# y't= -6.651et-1 +(-.2041)et-1 + et# porque tiene 2 thethas 
+
+# pronosticar
+plot(forecast(mod1, h=10))
+# es una limitacion porque el pronostico es una cte
+
+##### EJERCICIO
+baseA<- read.csv("/Users/gemaitzeltorresmejia/Downloads/AAPL.csv")
+tsA<- ts(baseA, start=2017, frequency= 252)
+modA<- auto.arima(tsA, seasonal = F)
+modA
+plot(forecast(modA, h=10))
+
+
+###
+baseB<- read.csv("/Users/gemaitzeltorresmejia/Downloads/tasa asalariado.csv")
+tsB<- ts(baseB, start=2005, frequency=4)
+modB<- auto.arima(tsB, seasonal= F)
+modB
+
+#ARIMA(2,1,0) 
+# y'=-0.4497et  -0.3099et
