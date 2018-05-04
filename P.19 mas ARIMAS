@@ -1,0 +1,83 @@
+base<-read.csv("/Users/gemaitzeltorresmejia/Downloads/TasasENOE.csv")
+deso<- ts(base[,1], start = 2005, end = c(2015,4), frequency = 4)
+deso1<- ts(base[,1], start = 2005, frequency = 4)
+deso
+tra<- ts(base[,2], start = 2005, end = c(2015,4), frequency = 4)
+tra1<- ts(base[,2], start = 2005, frequency = 4)
+suboc<- ts(base[,3], start = 2005, end = c(2015,4), frequency = 4)
+suboc1<- ts(base[,3], start = 2005,, frequency = 4)
+til1<- ts(base[,4], start = 2005, end = c(2015,4), frequency = 4)
+til11<- ts(base[,4], start = 2005, frequency = 4)
+
+####### DEOSCUPACION ######
+#prubas de media y varianza para desocupacion
+require(fpp) 
+adf.test(deso) # p-value = 0.984
+ddeso<-diff(deso)
+adf.test(ddeso) #p-value = 0.3223
+d2deso<-diff(ddeso)
+adf.test(d2deso) #p-value = 0.01
+
+#p y q
+acf(deso) # 7
+pacf(deso) # 2
+
+# el mejor modelo es el 4 con menor AICc
+mod1<- Arima(deso, order = c(2,2,7))
+mod1 #AICc=44.6
+mod2<- Arima(deso, order = c(1,2,7))
+mod2 #AICc=45.25 
+mod3<- Arima(deso, order = c(2,2,6))
+mod3 #AICc=45.05 
+mod4<- Arima(deso, order = c(2,1,7))
+mod4 #AICc=38.88
+mod5<- Arima(deso, order = c(1,1,5))
+mod5 #AICc=43.84 
+
+#grafica
+pronmod4<- forecast(mod4, h=8)
+x11()
+plot(pronmod4)
+lines(base[45:53,1])
+
+
+# aplicando auto.arima
+modarima<- auto.arima(deso)
+modarima # AICc=25.44 con orden ARIMA(0,1,0)(1,0,1)[4] 
+x11()
+plot(forecast(modarima,h=8))
+lines(deso1)
+
+####### TRABAJO ASALARIADO ######
+
+adf.test(tra) # p-value = 0.01221
+
+#p y q
+acf(tra) # 8
+pacf(tra) # 1
+
+# el mejor modelo es el 5 con menor AICc
+mod1<- Arima(tra, order = c(1,0,8))
+mod1 #AICc=134.77
+mod2<- Arima(tra, order = c(2,0,8))
+mod2 #AICc=138.33 
+mod3<- Arima(tra, order = c(1,0,7))
+mod3 #AICc=142.28
+mod4<- Arima(tra, order = c(3,0,8))
+mod4 #AICc=139.22
+mod5<- Arima(tra, order = c(2,1,8))
+mod5 #AICc=127.54
+
+#grafica
+pronmod5<- forecast(mod5, h=8)
+x11()
+plot(pronmod5)
+lines(tra1)
+
+
+# aplicando auto.arima
+modarima<- auto.arima(tra)
+modarima # AICc=97.94 con orden ARIMA(1,0,0)(1,1,0)[4] with drift 
+x11()
+plot(forecast(modarima,h=8))
+lines(tra1)
