@@ -1,0 +1,32 @@
+require("fpp")
+help("euretail")
+# graficar para ver a ojo d buen cubero si
+# la serie es estacional
+plot(euretail)
+# no es estacionaria
+tsdisplay(diff(euretail,4)) # dif con periodos 4
+#  aun no es estacionaria
+tsdisplay(diff(diff(euretail,4)))
+# para encontrar sale uno sino es significativo
+# el primer valor es el significarivo MA(1)
+# PACF(0)
+#ARIMA(0,1,1)(0,1,1)4
+# se espera que el 4 salga por la estacionaidad
+
+sarima1<- Arima(euretail, order = c(0,1,1), seasonal = c(0,1,1))
+
+#para observal resuduales
+tsdisplay(residuals(sarima))
+# se pueden proponer los modelos arima(0,1,2) y arima(0,1,3)
+# el acf pasa el sesago 2 y mueve el componente estacional 
+
+sarima2<- Arima(euretail, order = c(0,1,2), seasonal = c(0,1,1))
+sarima3<- Arima(euretail, order = c(0,1,3), seasonal = c(0,1,1)) # este esta muy cerca de la frontera
+
+# el modelo con menor AICc es el 3
+# ahora vamos a hacer la prueba de ruido blanco
+
+Box.test(residuals(sarima3), lag = 16, type = "Ljung-Box", fitdf = 4)
+# p-value mayor a 0.05 los errores son indep
+
+# se pude ahora pronosticar
