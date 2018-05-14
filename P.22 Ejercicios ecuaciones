@@ -1,0 +1,115 @@
+### ejercicio ecuaciones ###
+aero<-read.csv("/Users/gemaitzeltorresmejia/Downloads/AEROMEX.MX.csv")
+require("fpp")
+tsae<- ts(aero, frequency = 252, start = 2017)
+adf.test(tsae) # p-value = 0.4249
+ar1<- Arima(tsae, order = c(1,0,0))
+ar1
+# Yt= 0.9983*y(t-1)
+ar2<- Arima(tsae, order=c(2,0,0))
+ar2
+#Yt= 0.9945y(t-1)+0.0039y(t-2)
+ma1<- Arima(tsae, order = c(0,0,1))
+ma1
+# Yt= 0.9714e(t-1)
+ma2<- Arima(tsae, order = c(0,0,2))
+ma2
+# Yt=.5348e(t-1)+0.8115e(t-2)
+ma22<- arima(tsae, order = c(0,0,2))
+ma22
+
+### ejercicios librerias ###
+us<- (usnetelec)
+adf.test(us) #p-value = 0.3535
+us1<-diff(us)
+adf.test(us1)
+us2<- diff(us1)
+adf.test(us2) #p-value = 0.01
+plot(us2)
+acf(us2) #1
+pacf(us2) # 2
+# order=c(2,2,1)
+usarima<- Arima(us, order=c(2,2,1))
+usarima
+Box.test(residuals(usarima), lag = 16, type = "Ljung-Box", fitdf = 1)
+# p-value = 0.4302 por tnto si hay indep de errores
+
+
+usg<- (usgdp)
+adf.test(usg) #p-value = 0.99
+usg1<-diff(usg)
+adf.test(usg1) # p-value = 0.01
+plot(usg1)
+acf(usg1) #12
+pacf(usg1) # 5
+# order=c(5,1,12)
+usgarima<- Arima(usg, order=c(5,1,12))
+Box.test(residuals(usgarima), lag = 16, type = "Ljung-Box", fitdf = 1)
+# p-value = 0.9844 por tnto si hay indep de errores
+plot(forecast(usgarima, h=20))
+
+mc<- (mcopper)
+adf.test(mc) #p-value = 0.6641
+mc1<-diff(mc)
+adf.test(mc1) # p-value = 0.01
+plot(mc1)
+acf(mc1) #5
+pacf(mc1) # 4
+# order=c(4,1,5)
+mcarima<- Arima(mc, order=c(4,1,5))
+Box.test(residuals(mcarima), lag = 16, type = "Ljung-Box", fitdf = 1)
+# -value = 0.9997 por tnto si hay indep de errores
+plot(forecast(mcarima, h=20))
+#mc1arima<- auto.arima(mc)
+#plot(forecast(mc1arima, h=20))
+
+
+en<- (enplanements)
+adf.test(en) #p-value = 0.01
+plot(en)
+acf(en) #muchos
+pacf(en) # 13
+# order=c(4,1,5)
+enarima<- Arima(en, order=c(5,0,6), seasonal = c(3,0,2))
+enarima
+en1arima<- auto.arima(en)
+en1arima
+# ARIMA(2,0,1)(0,1,1)[12] 
+Box.test(residuals(en1arima), lag = 16, type = "Ljung-Box", fitdf = 12)
+# p-value = 0.06632 por tnto si hay indep de errores
+plot(forecast(en1arima, h=20))
+en2arima<-hw(en)
+plot(forecast(en2arima, h=20)) # hay menos varianza
+
+
+vis<- (visitors)
+adf.test(visitors) #p-value = 0.01
+plot(vis)
+acf(vis) #2
+pacf(vis) # 1
+# order=c(1,0,2)
+visarima<- Arima(vis, order=c(1,0,2), seasonal = c(1,1,2))
+enarima #AICc=998.76
+vis1arima<- auto.arima(vis)
+vis1arima # ICc=1946.04
+# ARIMA(1,0,1)(0,1,2)[12]
+Box.test(residuals(vis1arima), lag = 16, type = "Ljung-Box", fitdf = 12)
+# p-value = 0.01136
+Box.test(residuals(visarima), lag = 16, type = "Ljung-Box", fitdf = 12)
+# p-value = 0.003134
+plot(forecast(visarima, h=20))
+vis2arima<-hw(vis)
+plot(forecast(vis2arima, h=20))
+
+vis3arima<- Arima(vis, order=c(2,1,2), seasonal = c(1,1,2))
+Box.test(residuals(vis3arima), lag = 16, type = "Ljung-Box", fitdf = 12)
+# p-value = 0.0372
+
+vis4arima<- Arima(vis, order=c(2,1,2), seasonal = c(2,1,2))
+Box.test(residuals(vis4arima), lag = 16, type = "Ljung-Box", fitdf = 12)
+# p-value = 0.04212
+
+vis5arima<- Arima(vis, order=c(2,0,2), seasonal = c(2,1,2))
+Box.test(residuals(vis5arima), lag = 16, type = "Ljung-Box", fitdf = 12)
+# p-value = 0.04212
+#### como no cumple ninguno de los modelos arima me quedo con el holt winter
