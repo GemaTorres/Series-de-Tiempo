@@ -1,0 +1,99 @@
+##### ejercico ipc #####
+require(foreign)
+ipc<- read.csv("file:///C:/Users/USUARIO/Desktop/IPC.csv")
+tsipc<- ts(ipc, frequency = 12, start = 1970)
+plot(tsipc)
+require("fpp")
+holt<- hw(tsipc, h=12)
+plot(holt)
+d<-diff(tsipc)
+adf.test(d) #p-value = 0.02122
+acf(d)
+pacf(tsipc)
+modelo1<- auto.arima(tsipc)
+modelo1
+plot(forecast(modelo1, h=30))
+
+segundo<- window(tsipc, start=1995)
+plot(segundo)
+adf.test(segundo) #p-value = 0.01
+acf(segundo)
+pacf(segundo)
+
+modelo2<- auto.arima(segundo)
+modelo2
+plot(forecast(modelo2, h=30))
+
+#### ejercicio salario minimo ####
+sal<- read.csv("file:///C:/Users/USUARIO/Desktop/salario .csv")
+tssal<- ts(sal, start = 1964, frequency = 12)
+plot(tssal)
+adf.test(tssal) #p-value = 0.99
+dsal<- diff(tssal)
+adf.test(dsal) #p-value = 0.01
+
+pacf(dsal) # 6
+acf(dsal) #4
+
+modelo3<- arima(tssal, order=c(3,1,4))
+holt2<- hw(tssal, h=12)
+plot(holt2)
+
+a<- auto.arima(tssal)
+a
+plot(forecast(a, h=20))
+### el mejor modelo es el auto arima ya que no se usal pronosticos demasiado simples
+# debido a la estacionalidad de la serie
+
+
+##### ejerccio 3 estacional #####
+tasas<- read.csv("file:///C:/Users/USUARIO/Desktop/tasas.csv")
+tasas<-na.omit(tasas)
+pea<- ts(tasas[,2], start = 2005, frequency = 12)
+plot(pea)
+adf.test(pea) #p-value = 0.01
+acf(pea) # 7
+pacf(pea) # 4
+# c(7,0,4)
+modelo4<- arima(pea, order = c(7,0,4), seasonal=c(5,0,3))
+Box.test(residuals(modelo4), lag = 20, type ="Ljung-Box")
+#p-value = 0.9956 aic = 230.84
+modelo5<- arima(pea, order = c(4,0,3), seasonal=c(2,0,2))
+Box.test(residuals(modelo5), lag = 20, type ="Ljung-Box")
+#p-value = 0.9044 aic = 221.13
+modelo6<- arima(pea, order = c(2,0,0), seasonal=c(2,0,0))
+Box.test(residuals(modelo6), lag = 20, type ="Ljung-Box")
+# p-value = 0.2682 aic = 223.25
+modelo7<- arima(pea, order = c(2,0,1), seasonal=c(2,0,0))
+Box.test(residuals(modelo7), lag = 20, type ="Ljung-Box")
+#p-value = 0.3279 aic = 224.43
+hw<- hw(pea, h=14)
+plot(hw)
+plot(forecast(modelo5, h=16))
+### el mejor modelo es un sarima el modelo 5
+
+##### ejerccio 4 estacional #####
+tasas<- read.csv("file:///C:/Users/USUARIO/Desktop/tasas.csv")
+tasas<-na.omit(tasas)
+pnea<- ts(tasas[,3], start = 2005, frequency = 12)
+plot(pnea)
+adf.test(pnea) #p-value = 0.01
+acf(pnea) # 6
+pacf(pnea) # 4
+# c(6,0,4)
+modelo4<- arima(pnea, order = c(7,0,4), seasonal=c(5,0,3))
+Box.test(residuals(modelo4), lag = 20, type ="Ljung-Box")
+#p-value = 0.9956 aic = 230.84
+modelo5<- arima(pnea, order = c(4,0,3), seasonal=c(2,0,2))
+Box.test(residuals(modelo5), lag = 20, type ="Ljung-Box")
+#p-value = 0.9044 aic = 221.13
+modelo6<- arima(pnea, order = c(2,0,0), seasonal=c(2,0,0))
+Box.test(residuals(modelo6), lag = 20, type ="Ljung-Box")
+# p-value = 0.2682 aic = 223.25
+modelo7<- arima(pnea, order = c(2,0,1), seasonal=c(2,0,0))
+Box.test(residuals(modelo7), lag = 20, type ="Ljung-Box")
+#p-value = 0.3279 aic = 224.43
+hw<- hw(pea, h=14)
+plot(hw)
+plot(forecast(modelo5, h=16))
+### el mejor modelo es un sarima el modelo 5
